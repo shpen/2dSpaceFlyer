@@ -21,4 +21,9 @@ public class BasicActor extends Actor {
         batch.draw(mSprite, getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
+
+    public boolean overlaps(BasicActor other) {
+        return mSprite.getBoundingRectangle().setPosition(getX(), getY())
+                .overlaps(other.mSprite.getBoundingRectangle().setPosition(other.getX(), other.getY()));
+    }
 }
