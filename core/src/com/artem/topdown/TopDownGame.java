@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -17,6 +18,8 @@ public class TopDownGame extends ApplicationAdapter {
     public static final float PHYSICS_TO_PIXEL_SCALE = 10f;
     public static final float PIXEL_TO_PHYSICS_SCALE = 1 / PHYSICS_TO_PIXEL_SCALE;
 
+    private static final float CAMERA_FOLLOW_SPEED = 0.1f;
+
     private World mWorld;
     private Box2DDebugRenderer mDebugRenderer;
 
@@ -26,7 +29,7 @@ public class TopDownGame extends ApplicationAdapter {
 
     @Override
     public void create() {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Box2D.init();
         mWorld = new World(new Vector2(0, 0), true);
@@ -54,8 +57,8 @@ public class TopDownGame extends ApplicationAdapter {
         mStage.act();
 
         // Follow player
-        mStage.getCamera().position.x = mPlayer.getX();
-        mStage.getCamera().position.y = mPlayer.getY();
+        Vector3 camPos = mStage.getCamera().position;
+        camPos.slerp(new Vector3(mPlayer.getX(), mPlayer.getY(), 0), CAMERA_FOLLOW_SPEED);
         mStage.getCamera().update();
 
         mStage.draw();
