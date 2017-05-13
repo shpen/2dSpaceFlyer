@@ -38,10 +38,12 @@ public class TopDownGame extends ApplicationAdapter {
         mStage = new Stage(new FitViewport(128, 96));
         Gdx.input.setInputProcessor(mStage);
 
+        mPlayer = new PlayerActor(mWorld, 20, 20);
+
         // Create some random background elements
         fillBoxes();
+        fillNpcs();
 
-        mPlayer = new PlayerActor(mWorld, 20, 20);
         mStage.addActor(mPlayer);
     }
 
@@ -63,7 +65,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         mStage.draw();
 
-        mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));
+        //mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));
         mWorld.step(1/60f, 6, 2);
     }
 
@@ -78,6 +80,13 @@ public class TopDownGame extends ApplicationAdapter {
             Actor box = new PhysicsActor(tex, (float) Math.random() * 100f, (float) Math.random() * 100f,
                     mWorld, BodyDef.BodyType.StaticBody);
             mStage.addActor(box);
+        }
+    }
+
+    private void fillNpcs() {
+        for (int i = 0; i < 10; i++) {
+            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * 100f, (float) Math.random() * 100f);
+            mStage.addActor(npc);
         }
     }
 }
