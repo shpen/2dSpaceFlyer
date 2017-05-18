@@ -55,6 +55,10 @@ public class PhysicsActor extends BasicActor {
         mBody.setLinearVelocity(vec);
     }
 
+    protected Body getBody() {
+        return mBody;
+    }
+
     protected void enableCollision(boolean enable) {
         Filter filter = mFixture.getFilterData();
         filter.maskBits = (short) (enable ? -1 : 0);

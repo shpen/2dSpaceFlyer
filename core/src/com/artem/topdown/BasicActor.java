@@ -12,6 +12,7 @@ public class BasicActor extends Actor {
     public BasicActor(Texture texture) {
         mSprite = new Sprite(texture);
         setSize(mSprite.getWidth(), mSprite.getHeight());
+        setOrigin(getWidth() / 2, getHeight() / 2);
     }
 
     @Override
