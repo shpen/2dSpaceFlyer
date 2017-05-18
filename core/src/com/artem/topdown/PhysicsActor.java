@@ -35,6 +35,7 @@ public class PhysicsActor extends BasicActor {
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
         mFixture = mBody.createFixture(boxShape, bodyType == BodyDef.BodyType.StaticBody ? 0 : 1);
+        mFixture.setFriction(0);
         boxShape.dispose();
     }
 
@@ -50,11 +51,11 @@ public class PhysicsActor extends BasicActor {
         super.setPosition(x * PHYSICS_TO_PIXEL_SCALE - getWidth() / 2, y * PHYSICS_TO_PIXEL_SCALE - getHeight() / 2);
     }
 
-    public void setVelocity(Vector2 vec) {
+    protected void setVelocity(Vector2 vec) {
         mBody.setLinearVelocity(vec);
     }
 
-    public void enableCollision(boolean enable) {
+    protected void enableCollision(boolean enable) {
         Filter filter = mFixture.getFilterData();
         filter.maskBits = (short) (enable ? -1 : 0);
         mFixture.setFilterData(filter);
