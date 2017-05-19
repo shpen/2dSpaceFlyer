@@ -20,9 +20,7 @@ public class NpcActor extends PhysicsActor {
     }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
-
+    protected void doAct(float delta) {
         Vector2 playerDir = new Vector2(mPlayer.getX() - getX(), mPlayer.getY() - getY());
         playerDir.nor().scl(MOVE_SPEED);
         setVelocity(playerDir);

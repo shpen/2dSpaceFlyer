@@ -42,7 +42,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         // Create some random background elements
         fillBoxes();
-        fillNpcs();
+        //fillNpcs();
 
         mStage.addActor(mPlayer);
     }
@@ -75,10 +75,8 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillBoxes() {
-        Texture tex = new Texture("box.png");
         for (int i = 0; i < 10; i++) {
-            Actor box = new PhysicsActor(tex, (float) Math.random() * 100f, (float) Math.random() * 100f,
-                    mWorld, BodyDef.BodyType.StaticBody, 0f);
+            Actor box = new GravityActor(mWorld, (float) Math.random() * 100f, (float) Math.random() * 100f);
             mStage.addActor(box);
         }
     }
