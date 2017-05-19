@@ -15,7 +15,7 @@ public class NpcActor extends PhysicsActor {
     private final PlayerActor mPlayer;
 
     public NpcActor(World world, PlayerActor player, float x, float y) {
-        super(new Texture("npc.png"), x, y, world, BodyDef.BodyType.DynamicBody);
+        super(new Texture("npc.png"), x, y, world, BodyDef.BodyType.DynamicBody, 0.5f);
         mPlayer = player;
     }
 

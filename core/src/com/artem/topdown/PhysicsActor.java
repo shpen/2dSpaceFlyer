@@ -18,7 +18,7 @@ public class PhysicsActor extends BasicActor {
     private final Body mBody;
     private final Fixture mFixture;
 
-    public PhysicsActor(Texture texture, float x, float y, World world, BodyDef.BodyType bodyType) {
+    public PhysicsActor(Texture texture, float x, float y, World world, BodyDef.BodyType bodyType, float density) {
         super(texture);
         setPosition(x, y);
 
@@ -34,7 +34,7 @@ public class PhysicsActor extends BasicActor {
         // Create physics collision shape
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
-        mFixture = mBody.createFixture(boxShape, bodyType == BodyDef.BodyType.StaticBody ? 0 : 1);
+        mFixture = mBody.createFixture(boxShape, density);
         mFixture.setFriction(0);
         boxShape.dispose();
     }
@@ -44,6 +44,7 @@ public class PhysicsActor extends BasicActor {
         super.act(delta);
 
         setPosition(mBody.getPosition().x, mBody.getPosition().y);
+        setRotation((float) Math.toDegrees(mBody.getAngle()));
     }
 
     @Override

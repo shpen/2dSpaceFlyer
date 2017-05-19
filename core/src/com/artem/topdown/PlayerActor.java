@@ -14,7 +14,7 @@ public class PlayerActor extends PhysicsActor {
     private static final float MOVE_SPEED = 5.0f;
 
     public PlayerActor(World world, float x, float y) {
-        super(new Texture("player.png"), x, y, world, BodyDef.BodyType.DynamicBody);
+        super(new Texture("player.png"), x, y, world, BodyDef.BodyType.DynamicBody, 100f);
     }
 
     @Override
@@ -38,6 +38,7 @@ public class PlayerActor extends PhysicsActor {
 
         // Update physics model
         setVelocity(cappedVel);
+        //setVelocity(accelVel.nor().scl(MOVE_SPEED));
 
         // Update visual model
         setRotation((float) Math.toDegrees(angle));

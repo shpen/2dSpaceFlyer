@@ -78,7 +78,7 @@ public class TopDownGame extends ApplicationAdapter {
         Texture tex = new Texture("box.png");
         for (int i = 0; i < 10; i++) {
             Actor box = new PhysicsActor(tex, (float) Math.random() * 100f, (float) Math.random() * 100f,
-                    mWorld, BodyDef.BodyType.StaticBody);
+                    mWorld, BodyDef.BodyType.StaticBody, 0f);
             mStage.addActor(box);
         }
     }
