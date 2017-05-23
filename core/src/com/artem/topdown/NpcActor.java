@@ -10,19 +10,21 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 public class NpcActor extends PhysicsActor {
-    private static final float MOVE_SPEED = 3.0f;
+    private static final float MOVE_SPEED = 1.5f;
+    private static final float FORWARD_ACCEL = 10f;
 
     private final PlayerActor mPlayer;
 
     public NpcActor(World world, PlayerActor player, float x, float y) {
-        super(new Texture("npc.png"), x, y, world, BodyDef.BodyType.DynamicBody, 0.5f);
+        super(new Texture("npc.png"), x, y, world, BodyDef.BodyType.DynamicBody, 25f);
         mPlayer = player;
+        setMaxVelocity(MOVE_SPEED);
     }
 
     @Override
     protected void doAct(float delta) {
-        Vector2 playerDir = new Vector2(mPlayer.getX() - getX(), mPlayer.getY() - getY());
-        playerDir.nor().scl(MOVE_SPEED);
-        setVelocity(playerDir);
+        float angle = new Vector2(mPlayer.getX() - getX(), mPlayer.getY() - getY()).angle();
+        Vector2 accelVel = new Vector2(1, 0).rotate(angle).scl(FORWARD_ACCEL);
+        getBody().applyLinearImpulse(accelVel, getBody().getWorldCenter(), true);
     }
 }

@@ -11,7 +11,7 @@ public class PlayerActor extends PhysicsActor {
 
     private static final float ROTATION_SPEED = (float) Math.PI;
     private static final float FORWARD_ACCEL = 10.0f;
-    private static final float MOVE_SPEED = 5.0f;
+    private static final float MOVE_SPEED = 4.0f;
 
     public PlayerActor(World world, float x, float y) {
         super(new Texture("player.png"), x, y, world, BodyDef.BodyType.DynamicBody, 100f);
@@ -22,10 +22,23 @@ public class PlayerActor extends PhysicsActor {
     @Override
     protected void doAct(float delta) {
         float angularVelocity = 0;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+
+        boolean touchLeft = false;
+        boolean touchRight = false;
+        for (int i = 0; i < 5; i++) {
+            if (Gdx.input.isTouched(i)) {
+                if (Gdx.input.getX(i) < Gdx.graphics.getWidth() / 2) {
+                    touchLeft = true;
+                } else {
+                    touchRight = true;
+                }
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT) || touchLeft) {
             angularVelocity += ROTATION_SPEED;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || touchRight) {
             angularVelocity -= ROTATION_SPEED;
         }
         //getBody().setAngularVelocity(angularVelocity);

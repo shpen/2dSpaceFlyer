@@ -3,10 +3,8 @@ package com.artem.topdown;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -35,14 +33,14 @@ public class TopDownGame extends ApplicationAdapter {
         mWorld = new World(new Vector2(0, 0), true);
         mDebugRenderer = new Box2DDebugRenderer();
 
-        mStage = new Stage(new FitViewport(128, 96));
+        mStage = new Stage(new FitViewport(152, 256));
         Gdx.input.setInputProcessor(mStage);
 
         mPlayer = new PlayerActor(mWorld, 20, 20);
 
         // Create some random background elements
-        fillBoxes();
-        //fillNpcs();
+        fillGravityActors();
+        fillNpcs();
 
         mStage.addActor(mPlayer);
     }
@@ -74,16 +72,16 @@ public class TopDownGame extends ApplicationAdapter {
         mStage.dispose();
     }
 
-    private void fillBoxes() {
-        for (int i = 0; i < 10; i++) {
-            Actor box = new GravityActor(mWorld, (float) Math.random() * 100f, (float) Math.random() * 100f);
+    private void fillGravityActors() {
+        for (int i = 0; i < 20; i++) {
+            Actor box = new GravityActor(mWorld, (float) Math.random() * 600f, (float) Math.random() * 600f);
             mStage.addActor(box);
         }
     }
 
     private void fillNpcs() {
         for (int i = 0; i < 10; i++) {
-            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * 100f, (float) Math.random() * 100f);
+            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * 600f, (float) Math.random() * 600f);
             mStage.addActor(npc);
         }
     }
