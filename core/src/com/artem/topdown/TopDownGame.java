@@ -36,6 +36,8 @@ public class TopDownGame extends ApplicationAdapter {
         mStage = new Stage(new FitViewport(152, 256));
         Gdx.input.setInputProcessor(mStage);
 
+        mStage.addActor(new BackgroundActor());
+
         mPlayer = new PlayerActor(mWorld, 20, 20);
 
         // Create some random background elements
