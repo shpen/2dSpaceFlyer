@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -20,6 +19,8 @@ public class PlayerActor extends PhysicsActor {
 
     private final ShapeRenderer mRenderer;
     private final float[] mVerts;
+
+    private float mAnimationCounter;
 
     public PlayerActor(World world, float x, float y) {
         super(new Texture("player.png"), x, y, world, BodyDef.BodyType.DynamicBody, 100f);
@@ -92,5 +93,13 @@ public class PlayerActor extends PhysicsActor {
         float angle = getBody().getAngle();
         Vector2 accelVel = new Vector2(0, 1).rotateRad(angle).scl(FORWARD_ACCEL);
         getBody().applyLinearImpulse(accelVel, getBody().getWorldCenter(), true);
+
+        mAnimationCounter += 0.1f;
+        if (mAnimationCounter > 1) {
+            mAnimationCounter = 0;
+            Vector2 pos = new Vector2(getX() + getWidth() / 2, getY() + getHeight() / 2);
+            //pos.add(new Vector2(0, -5).rotate(getRotation()));
+            getStage().addActor(new PlayerJetActor(pos.x, pos.y, getRotation()));
+        }
     }
 }

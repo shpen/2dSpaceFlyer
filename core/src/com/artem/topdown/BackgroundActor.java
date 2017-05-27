@@ -30,7 +30,7 @@ public class BackgroundActor extends Actor {
         for (int i = 0; i < NUM_POINTS; i++) {
             mX[i] = (float) Math.random() * size;
             mY[i] = (float) Math.random() * size;
-            mA[i] = (float) Math.random() * 0.5f + 0.3f;
+            mA[i] = (float) Math.random() * 0.5f + 0f;
             mR[i] = (float) Math.random() * 1f + 0.5f;
         }
     }
