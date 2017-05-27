@@ -65,9 +65,9 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        //compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        //compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        //compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 }
 
@@ -83,9 +83,9 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
+        //compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
+        //compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
+        //compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
     }
 }
 
@@ -96,9 +96,9 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        //compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        //compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        //compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 }
 
