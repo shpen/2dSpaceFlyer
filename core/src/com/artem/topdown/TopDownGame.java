@@ -65,7 +65,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         mStage.draw();
 
-        mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));
+        //mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));
         mWorld.step(1/60f, 6, 2);
     }
 

@@ -10,8 +10,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PlayerActor extends PhysicsActor {
 
     private static final float ROTATION_SPEED = (float) Math.PI;
-    private static final float FORWARD_ACCEL = 10.0f;
-    private static final float MOVE_SPEED = 4.0f;
+    private static final float FORWARD_ACCEL = 20.0f;
+    private static final float MOVE_SPEED = 10.0f;
 
     public PlayerActor(World world, float x, float y) {
         super(new Texture("player.png"), x, y, world, BodyDef.BodyType.DynamicBody, 100f);

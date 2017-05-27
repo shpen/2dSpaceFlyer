@@ -12,9 +12,9 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 public class NpcActor extends PhysicsActor {
-    private static final float MOVE_SPEED = 2f;
-    private static final float FORWARD_ACCELERATION = 3f;
-    private static final float ROTATION_SPEED = (float) Math.PI * 0.8f;
+    private static final float MOVE_SPEED = 6f;
+    private static final float FORWARD_ACCELERATION = 10f;
+    private static final float ROTATION_SPEED = (float) Math.PI * 2;
 
     private static final float PLAYER_DISTANCE_LIMIT = 2000f;
     private static final float PLAYER_ANGLE_TOLERANCE = 0.1f;
@@ -38,14 +38,14 @@ public class NpcActor extends PhysicsActor {
         float acceleration = FORWARD_ACCELERATION;
         if (playerDir.len() < PLAYER_DISTANCE_LIMIT) {
             float angleDelta = getAngleDelta(selfAngle, playerAngle);
-            Gdx.app.log("NpcActor", "playerAngle: " + playerAngle + " selfAngle: " + selfAngle + " angleDelta: " + angleDelta);
+            //Gdx.app.log("NpcActor", "playerAngle: " + playerAngle + " selfAngle: " + selfAngle + " angleDelta: " + angleDelta);
             if (angleDelta < - PLAYER_ANGLE_TOLERANCE) {
                 angularImpulse = ROTATION_SPEED;
             } else if (angleDelta > PLAYER_ANGLE_TOLERANCE) {
                 angularImpulse = -ROTATION_SPEED;
             }
 
-            acceleration *= 1 - (Math.abs(angleDelta) / Math.PI);
+            acceleration *= 1;// - (Math.abs(angleDelta) / Math.PI);
         } else {
 
         }

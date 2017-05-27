@@ -43,8 +43,12 @@ public class GravityActor extends PhysicsActor {
                 generateBodyDef(x, y),
                 generateFixtureDef(new Texture("circle.png").getWidth() / 2));
         boolean attract = Math.random() > 0.5f;
-        mGravity = 1.5f * getWidth() * (attract ? 1 : -1);
-        setColor(attract ? 1 : 0, 0, attract ? 0 : 1, 1);
+        mGravity = 1.5f * getWidth() * (attract ? 0.7f : -1.5f);
+        if (attract) {
+            setColor(0.2f, 0f, 0f, 1f);
+        } else {
+            setColor(0.6f, 0.6f, 1f, 1f);
+        }
     }
 
     public float getGravity() {

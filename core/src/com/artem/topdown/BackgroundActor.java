@@ -13,8 +13,8 @@ public class BackgroundActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        for (int i = -400; i < 400; i += 40) {
-            for (int j = -400; j < 400; j += 40) {
+        for (int i = 0; i < 600; i += 40) {
+            for (int j = 0; j < 600; j += 40) {
                 batch.draw(sTex, i, j, 1, 1);
             }
         }
