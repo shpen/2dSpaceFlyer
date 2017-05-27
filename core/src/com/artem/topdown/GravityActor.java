@@ -52,7 +52,7 @@ public class GravityActor extends PhysicsActor {
         setSize(radius*2, radius*2);
         //setOrigin(radius + getX(), radius + getY());
         mAttract = Math.random() > 0.5f;
-        mGravity = 10f * radius * (mAttract ? 0.7f : -1.5f);
+        mGravity = 15f * radius * (mAttract ? 0.7f : -1.5f);
         setColor(mAttract ? 1 : 0, 0.7f, mAttract ? 0 : 1, 1f);
 
         mOuterLinesSpacing = OUTER_LINES_SPACING * radius / 50;

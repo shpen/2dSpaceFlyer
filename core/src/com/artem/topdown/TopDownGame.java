@@ -14,7 +14,11 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.util.HashSet;
 
 public class TopDownGame extends ApplicationAdapter {
     public static final float PHYSICS_TO_PIXEL_SCALE = 10f;
@@ -24,6 +28,8 @@ public class TopDownGame extends ApplicationAdapter {
     private static final float ASPECT_RATIO = 16f / 9f;
     private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.1f;
+
+    private HashSet<PhysicsActor> mRemovePhysicsActors;
 
     private World mWorld;
     private Box2DDebugRenderer mDebugRenderer;
@@ -36,6 +42,8 @@ public class TopDownGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        mRemovePhysicsActors = new HashSet<PhysicsActor>();
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Box2D.init();
@@ -43,7 +51,7 @@ public class TopDownGame extends ApplicationAdapter {
         mDebugRenderer = new Box2DDebugRenderer();
         mWorld.setContactListener(mContactListener);
 
-        mStage = new Stage(new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
+        mStage = new Stage(new ExtendViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
         Gdx.input.setInputProcessor(mStage);
 
         mStage.addActor(new BackgroundActor(WORLD_SIZE));
@@ -65,6 +73,11 @@ public class TopDownGame extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        for (PhysicsActor actor : mRemovePhysicsActors) {
+            actor.remove();
+        }
+        mRemovePhysicsActors.clear();
 
         if(mSpawnCounter++ == 100) {
             mSpawnCounter = 0;
@@ -123,7 +136,7 @@ public class TopDownGame extends ApplicationAdapter {
                 create();
             // Npc hit a gravity object.
             } else if (npc != null && gravity != null) {
-                npc.remove();
+                mRemovePhysicsActors.add(npc);
             } // Don't care about anything else
         }
 

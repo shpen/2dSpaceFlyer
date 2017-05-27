@@ -104,7 +104,7 @@ public class PhysicsActor extends BasicActor {
 
     @Override
     public boolean remove() {
-        //mWorld.destroyBody(mBody);
+        mWorld.destroyBody(mBody);
         return super.remove();
     }
 
