@@ -20,6 +20,9 @@ public class TopDownGame extends ApplicationAdapter {
     public static final float PHYSICS_TO_PIXEL_SCALE = 10f;
     public static final float PIXEL_TO_PHYSICS_SCALE = 1 / PHYSICS_TO_PIXEL_SCALE;
 
+    private static final float WORLD_SIZE = 2000f;
+    private static final float ASPECT_RATIO = 16f / 9f;
+    private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.1f;
 
     private World mWorld;
@@ -28,6 +31,8 @@ public class TopDownGame extends ApplicationAdapter {
     private Stage mStage;
 
     private PlayerActor mPlayer;
+
+    private int mSpawnCounter;
 
     @Override
     public void create() {
@@ -38,12 +43,12 @@ public class TopDownGame extends ApplicationAdapter {
         mDebugRenderer = new Box2DDebugRenderer();
         mWorld.setContactListener(mContactListener);
 
-        mStage = new Stage(new FitViewport(304, 512));
+        mStage = new Stage(new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
         Gdx.input.setInputProcessor(mStage);
 
-        mStage.addActor(new BackgroundActor());
+        mStage.addActor(new BackgroundActor(WORLD_SIZE));
 
-        mPlayer = new PlayerActor(mWorld, 300, 300);
+        mPlayer = new PlayerActor(mWorld, WORLD_SIZE / 2, WORLD_SIZE / 2);
 
         // Create some random background elements
         fillGravityActors();
@@ -60,6 +65,11 @@ public class TopDownGame extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(mSpawnCounter++ == 100) {
+            mSpawnCounter = 0;
+            mStage.addActor(new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE));
+        }
 
         mStage.act();
 
@@ -80,15 +90,15 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillGravityActors() {
-        for (int i = 0; i < 20; i++) {
-            Actor box = new GravityActor(mWorld, (float) Math.random() * 600f, (float) Math.random() * 600f);
+        for (int i = 0; i < 40; i++) {
+            Actor box = new GravityActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
             mStage.addActor(box);
         }
     }
 
     private void fillNpcs() {
         for (int i = 0; i < 10; i++) {
-            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * 600f, (float) Math.random() * 600f);
+            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
             mStage.addActor(npc);
         }
     }
