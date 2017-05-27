@@ -1,7 +1,9 @@
 package com.artem.topdown;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -9,20 +11,47 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 
 public class BackgroundActor extends Actor {
-    private static final Texture sTex = new Texture("circle.png");
+    private static final int NUM_POINTS = 5000;
 
-    private final float mSize;
+    private final ShapeRenderer mRenderer;
+
+    private final float[] mX;
+    private final float[] mY;
+    private final float[] mA;
+    private final float[] mR;
 
     public BackgroundActor(float size) {
-        mSize = size;
+        mRenderer = new ShapeRenderer();
+
+        mX = new float[NUM_POINTS];
+        mY = new float[NUM_POINTS];
+        mA = new float[NUM_POINTS];
+        mR = new float[NUM_POINTS];
+        for (int i = 0; i < NUM_POINTS; i++) {
+            mX[i] = (float) Math.random() * size;
+            mY[i] = (float) Math.random() * size;
+            mA[i] = (float) Math.random() * 0.5f + 0.3f;
+            mR[i] = (float) Math.random() * 1f + 0.5f;
+        }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        for (int i = 0; i < mSize; i += 40) {
-            for (int j = 0; j < mSize; j += 40) {
-                batch.draw(sTex, i, j, 1, 1);
-            }
+        // Setup
+        batch.end();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        mRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        mRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        // Draw
+        for (int i = 0; i < NUM_POINTS; i++) {
+            mRenderer.setColor(1, 1, 1, mA[i]);
+            mRenderer.circle(mX[i], mY[i], mR[i]);
         }
+
+        // Tear down
+        mRenderer.end();
+        batch.begin();
     }
 }
