@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.artem.topdown.TopDownGame.PHYSICS_TO_PIXEL_SCALE;
 import static com.artem.topdown.TopDownGame.PIXEL_TO_PHYSICS_SCALE;
 
 /**
@@ -41,14 +42,13 @@ public class GravityActor extends PhysicsActor {
     public GravityActor(World world, float x, float y) {
         super(new Texture("circle.png"), x, y, world,
                 generateBodyDef(x, y),
-                generateFixtureDef(new Texture("circle.png").getWidth() / 2));
+                generateFixtureDef((float) Math.random() * 40f + 10f));
+        float radius = getBody().getFixtureList().first().getShape().getRadius() * PHYSICS_TO_PIXEL_SCALE;
+        setSize(radius*2, radius*2);
+        setOrigin(radius, radius);
         boolean attract = Math.random() > 0.5f;
-        mGravity = 1.5f * getWidth() * (attract ? 0.7f : -1.5f);
-        if (attract) {
-            setColor(0.2f, 0f, 0f, 1f);
-        } else {
-            setColor(0.6f, 0.6f, 1f, 1f);
-        }
+        mGravity = 10f * radius * (attract ? 0.7f : -1.5f);
+        setColor(attract ? 1 : 0, 0, attract ? 0 : 1, 0.5f);
     }
 
     public float getGravity() {
