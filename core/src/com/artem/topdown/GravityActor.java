@@ -57,7 +57,7 @@ public class GravityActor extends PhysicsActor {
 
         mOuterLinesSpacing = OUTER_LINES_SPACING * radius / 50;
         mMaxOuterLineDistance = mOuterLinesSpacing * NUM_OUTER_LINES;
-        mRenderer = new ShapeRenderer();
+        mRenderer = TopDownGame.mShapeRenderer;//new ShapeRenderer();
     }
 
     private static final int NUM_OUTER_LINES = 4;
@@ -85,6 +85,7 @@ public class GravityActor extends PhysicsActor {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         mRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        mRenderer.identity();
 
         // Draw solid circle
         mRenderer.setColor(getColor());

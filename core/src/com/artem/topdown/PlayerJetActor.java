@@ -26,7 +26,7 @@ public class PlayerJetActor extends Actor{
         mX = x;
         mY = y;
         mAngle = angle;
-        mRenderer = new ShapeRenderer();
+        mRenderer = TopDownGame.mShapeRenderer;//new ShapeRenderer();
     }
 
     @Override

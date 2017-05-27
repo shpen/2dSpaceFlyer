@@ -3,6 +3,7 @@ package com.artem.topdown;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2D;
@@ -40,6 +41,8 @@ public class TopDownGame extends ApplicationAdapter {
 
     private int mSpawnCounter;
 
+    public static ShapeRenderer mShapeRenderer;
+
     @Override
     public void create() {
         mRemovePhysicsActors = new HashSet<PhysicsActor>();
@@ -50,6 +53,8 @@ public class TopDownGame extends ApplicationAdapter {
         mWorld = new World(new Vector2(0, 0), true);
         mDebugRenderer = new Box2DDebugRenderer();
         mWorld.setContactListener(mContactListener);
+
+        mShapeRenderer = new ShapeRenderer();
 
         mStage = new Stage(new ExtendViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
         Gdx.input.setInputProcessor(mStage);

@@ -21,7 +21,7 @@ public class BackgroundActor extends Actor {
     private final float[] mR;
 
     public BackgroundActor(float size) {
-        mRenderer = new ShapeRenderer();
+        mRenderer = TopDownGame.mShapeRenderer;//new ShapeRenderer();
 
         mX = new float[NUM_POINTS];
         mY = new float[NUM_POINTS];
@@ -42,6 +42,7 @@ public class BackgroundActor extends Actor {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         mRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        mRenderer.identity();
         mRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         // Draw

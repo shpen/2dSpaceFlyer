@@ -27,7 +27,7 @@ public class PlayerActor extends PhysicsActor {
         setMaxVelocity(MOVE_SPEED);
         getBody().setAngularDamping(100);
 
-        mRenderer = new ShapeRenderer();
+        mRenderer = TopDownGame.mShapeRenderer;//new ShapeRenderer();
         mVerts = new float[] {
                 0f, 0f,
                 0.5f, 1f,
