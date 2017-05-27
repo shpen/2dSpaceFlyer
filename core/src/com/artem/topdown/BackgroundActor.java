@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 
 public class BackgroundActor extends Actor {
-    private static final int NUM_POINTS = 5000;
+    private static final int NUM_POINTS = 200;
 
     private final ShapeRenderer mRenderer;
 
@@ -30,7 +30,7 @@ public class BackgroundActor extends Actor {
         for (int i = 0; i < NUM_POINTS; i++) {
             mX[i] = (float) Math.random() * size;
             mY[i] = (float) Math.random() * size;
-            mA[i] = (float) Math.random() * 0.5f + 0f;
+            mA[i] = (float) Math.random() * 0.5f + 0.2f;
             mR[i] = (float) Math.random() * 1f + 0.5f;
         }
     }
