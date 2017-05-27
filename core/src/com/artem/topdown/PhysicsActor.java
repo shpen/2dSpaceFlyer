@@ -32,6 +32,7 @@ public class PhysicsActor extends BasicActor {
         mBody.setUserData(this);
 
         mFixture = mBody.createFixture(fixtureDef);
+        mFixture.setUserData(this);
         fixtureDef.shape.dispose();
     }
 
@@ -54,6 +55,7 @@ public class PhysicsActor extends BasicActor {
         boxShape.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
         mFixture = mBody.createFixture(boxShape, density);
         mFixture.setFriction(0);
+        mFixture.setUserData(this);
         boxShape.dispose();
     }
 
@@ -98,6 +100,12 @@ public class PhysicsActor extends BasicActor {
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x * PHYSICS_TO_PIXEL_SCALE - getWidth() / 2, y * PHYSICS_TO_PIXEL_SCALE - getHeight() / 2);
+    }
+
+    @Override
+    public boolean remove() {
+        //mWorld.destroyBody(mBody);
+        return super.remove();
     }
 
     protected void setVelocity(Vector2 vec) {

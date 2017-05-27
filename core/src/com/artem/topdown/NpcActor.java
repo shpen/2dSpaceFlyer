@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class NpcActor extends PhysicsActor {
     private static final float MOVE_SPEED = 6f;
-    private static final float FORWARD_ACCELERATION = 10f;
+    private static final float FORWARD_ACCELERATION = 20f;
     private static final float ROTATION_SPEED = (float) Math.PI * 2;
 
     private static final float PLAYER_DISTANCE_LIMIT = 2000f;
