@@ -1,20 +1,15 @@
 package com.artem.topdown;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
-
-/**
- * Created by Artem on 5/12/2017.
- */
 
 public class NpcActor extends PhysicsActor {
     private static final float MOVE_SPEED = 6f;
     private static final float FORWARD_ACCELERATION = 20f;
-    private static final float ROTATION_SPEED = (float) Math.PI * 2;
+    private static final float ROTATION_SPEED = 15f;
 
     private static final float PLAYER_DISTANCE_LIMIT = 2000f;
     private static final float PLAYER_ANGLE_TOLERANCE = 0.1f;
@@ -22,10 +17,19 @@ public class NpcActor extends PhysicsActor {
     private final PlayerActor mPlayer;
 
     public NpcActor(World world, PlayerActor player, float x, float y) {
-        super(new Texture("npc.png"), x, y, world, BodyDef.BodyType.DynamicBody, 25f);
+        super(x, y, 7, 7, world, BodyDef.BodyType.DynamicBody, 25f);
         mPlayer = player;
         getBody().setAngularDamping(100f);
         setMaxVelocity(MOVE_SPEED);
+    }
+
+    @Override
+    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+        renderer.setColor(Color.RED);
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
+        renderer.rotate(0, 0, 1, getRotation());
+        renderer.rect(-getWidth() / 2, -getHeight() / 2, getWidth(), getHeight());
     }
 
     @Override

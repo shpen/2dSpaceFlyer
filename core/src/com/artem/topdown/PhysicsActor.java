@@ -1,6 +1,5 @@
 package com.artem.topdown;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -8,14 +7,13 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 import static com.artem.topdown.TopDownGame.PHYSICS_TO_PIXEL_SCALE;
 import static com.artem.topdown.TopDownGame.PIXEL_TO_PHYSICS_SCALE;
 
-public class PhysicsActor extends BasicActor {
+public abstract class PhysicsActor extends ShapeActor {
 
     private final World mWorld;
     private final Body mBody;
@@ -23,9 +21,9 @@ public class PhysicsActor extends BasicActor {
 
     private float mMaxVelocity = -1;
 
-    public PhysicsActor(Texture texture, float x, float y, World world, BodyDef bodyDef, FixtureDef fixtureDef) {
-        super(texture);
+    public PhysicsActor(float x, float y, World world, BodyDef bodyDef, FixtureDef fixtureDef) {
         setPosition(x, y);
+        setSize(fixtureDef.shape.getRadius(), fixtureDef.shape.getRadius());
 
         mWorld = world;
         mBody = mWorld.createBody(bodyDef);
@@ -36,9 +34,9 @@ public class PhysicsActor extends BasicActor {
         fixtureDef.shape.dispose();
     }
 
-    public PhysicsActor(Texture texture, float x, float y, World world, BodyDef.BodyType bodyType, float density) {
-        super(texture);
+    public PhysicsActor(float x, float y, float width, float height, World world, BodyDef.BodyType bodyType, float density) {
         setPosition(x, y);
+        setSize(width, height);
 
         mWorld = world;
 
