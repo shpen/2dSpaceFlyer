@@ -66,6 +66,7 @@ public class TopDownGame extends ApplicationAdapter {
         // Create some random background elements
         fillGravityActors();
         fillNpcs();
+        fillPickups();
 
         mStage.addActor(mPlayer);
     }
@@ -118,6 +119,13 @@ public class TopDownGame extends ApplicationAdapter {
         for (int i = 0; i < 10; i++) {
             Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
             mStage.addActor(npc);
+        }
+    }
+
+    private void fillPickups() {
+        for (int i = 0; i < 100; i++) {
+            Actor pickup = new PickupActor((float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+            mStage.addActor(pickup);
         }
     }
 
