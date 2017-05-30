@@ -2,8 +2,10 @@ package com.artem.topdown;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 
-public class PickupActor extends ShapeActor {
+public class PickupActor extends PhysicsActor {
     private static final Color COLOR = new Color(0.7f, 1f, 0.2f, 1f);
 
     private static final float OUTER_RADIUS = 20f;
@@ -12,14 +14,10 @@ public class PickupActor extends ShapeActor {
 
     private static final float ANIMATION_RATE = 0.003f;
 
-    private final float mX;
-    private final float mY;
-
     private float mAnimationCounter;
 
-    public PickupActor(float x, float y) {
-        mX = x;
-        mY = y;
+    public PickupActor(World world, float x, float y) {
+        super(x, y, INNER_RADIUS * 2, INNER_RADIUS * 2, world, BodyDef.BodyType.StaticBody, true, 0f);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class PickupActor extends ShapeActor {
 
         for (int i = 0; i < NUM_LAYERS; i++) {
             renderer.identity();
-            renderer.translate(mX - OUTER_RADIUS / 2, mY - OUTER_RADIUS / 2, 0);
+            renderer.translate(getX() - OUTER_RADIUS / 2, getY() - OUTER_RADIUS / 2, 0);
             renderer.rotate(0, 0, 1, mAnimationCounter * (float) Math.pow(-1, i) * 360);
 
             renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -43,7 +41,7 @@ public class PickupActor extends ShapeActor {
         }
 
         renderer.identity();
-        renderer.translate(mX - OUTER_RADIUS / 2, mY - OUTER_RADIUS / 2, 0);
+        renderer.translate(getX() - OUTER_RADIUS / 2, getY() - OUTER_RADIUS / 2, 0);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(COLOR);
         renderer.circle(0, 0, INNER_RADIUS, 6);

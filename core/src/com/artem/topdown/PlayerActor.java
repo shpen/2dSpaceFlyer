@@ -19,7 +19,7 @@ public class PlayerActor extends PhysicsActor {
     private float mAnimationCounter;
 
     public PlayerActor(World world, float x, float y) {
-        super(x, y, 10, 10, world, BodyDef.BodyType.DynamicBody, 100f);
+        super(x, y, 10, 10, world, BodyDef.BodyType.DynamicBody, false, 100f);
         setMaxVelocity(MOVE_SPEED);
         getBody().setAngularDamping(100);
         

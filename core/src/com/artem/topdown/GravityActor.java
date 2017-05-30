@@ -22,14 +22,14 @@ public class GravityActor extends PhysicsActor {
     private float mAnimationCounter;
 
     public GravityActor(World world, float x, float y) {
-        super(x, y, world,
+        super(world,
                 generateBodyDef(x, y),
-                generateFixtureDef((float) Math.random() * 40f + 10f));
+                generateFixtureDef((float) Math.random() * 60f + 20f));
         float radius = getBody().getFixtureList().first().getShape().getRadius() * PHYSICS_TO_PIXEL_SCALE;
         setSize(radius*2, radius*2);
         //setOrigin(radius + getX(), radius + getY());
         mAttract = Math.random() > 0.5f;
-        mGravity = 15f * radius * (mAttract ? 0.7f : -1.5f);
+        mGravity = 20f * radius * (mAttract ? 0.7f : -1.5f);
         setColor(mAttract ? 1 : 0, 0.7f, mAttract ? 0 : 1, 1f);
 
         mOuterLinesSpacing = OUTER_LINES_SPACING * radius / 50;
@@ -80,6 +80,7 @@ public class GravityActor extends PhysicsActor {
         shape.setRadius(radius * PIXEL_TO_PHYSICS_SCALE);    //.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
         FixtureDef def = new FixtureDef();
         def.shape = shape;
+        def.isSensor = true;
         def.density = 0f;
         return def;
     }

@@ -17,7 +17,7 @@ public class NpcActor extends PhysicsActor {
     private final PlayerActor mPlayer;
 
     public NpcActor(World world, PlayerActor player, float x, float y) {
-        super(x, y, 7, 7, world, BodyDef.BodyType.DynamicBody, 25f);
+        super(x, y, 7, 7, world, BodyDef.BodyType.DynamicBody, false, 25f);
         mPlayer = player;
         getBody().setAngularDamping(100f);
         setMaxVelocity(MOVE_SPEED);

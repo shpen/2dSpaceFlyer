@@ -26,6 +26,7 @@ public class TopDownGame extends ApplicationAdapter {
     public static final float PIXEL_TO_PHYSICS_SCALE = 1 / PHYSICS_TO_PIXEL_SCALE;
 
     private static final float WORLD_SIZE = 2000f;
+
     private static final float ASPECT_RATIO = 16f / 9f;
     private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.1f;
@@ -33,6 +34,7 @@ public class TopDownGame extends ApplicationAdapter {
     private HashSet<PhysicsActor> mRemovePhysicsActors;
 
     private World mWorld;
+    private Grid mGrid;
     private Box2DDebugRenderer mDebugRenderer;
 
     private Stage mStage;
@@ -54,6 +56,9 @@ public class TopDownGame extends ApplicationAdapter {
         mDebugRenderer = new Box2DDebugRenderer();
         mWorld.setContactListener(mContactListener);
 
+        // Create grid before any other physics object, so we can detect them properly
+        mGrid = new Grid(mWorld, WORLD_SIZE * PIXEL_TO_PHYSICS_SCALE);
+
         mShapeRenderer = new ShapeRenderer();
 
         mStage = new Stage(new ExtendViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
@@ -62,13 +67,12 @@ public class TopDownGame extends ApplicationAdapter {
         mStage.addActor(new BackgroundActor(WORLD_SIZE));
 
         mPlayer = new PlayerActor(mWorld, WORLD_SIZE / 2, WORLD_SIZE / 2);
+        mStage.addActor(mPlayer);
 
         // Create some random background elements
         fillGravityActors();
         fillNpcs();
         fillPickups();
-
-        mStage.addActor(mPlayer);
     }
 
     @Override
@@ -123,8 +127,8 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillPickups() {
-        for (int i = 0; i < 100; i++) {
-            Actor pickup = new PickupActor((float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+        for (int i = 0; i < 10; i++) {
+            Actor pickup = new PickupActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
             mStage.addActor(pickup);
         }
     }
@@ -137,25 +141,57 @@ public class TopDownGame extends ApplicationAdapter {
             NpcActor npc = null;
             PlayerActor player = null;
             GravityActor gravity = null;
+            Grid.Cell gridCell = null;
+            Actor other = null;
             if (a instanceof NpcActor) npc = (NpcActor) a;
             if (b instanceof NpcActor) npc = (NpcActor) b;
             if (a instanceof PlayerActor) player = (PlayerActor) a;
             if (b instanceof PlayerActor) player = (PlayerActor) b;
             if (a instanceof GravityActor) gravity = (GravityActor) a;
             if (b instanceof GravityActor) gravity = (GravityActor) b;
+            if (a instanceof Grid.Cell && !(b instanceof Grid.Cell)) {
+                gridCell = (Grid.Cell) a;
+                other = (Actor) b;
+            }
+            if (b instanceof Grid.Cell && !(a instanceof Grid.Cell)) {
+                gridCell = (Grid.Cell) b;
+                other = (Actor) a;
+            }
 
             // Player hit something. Game over
             if (player != null && (gravity != null || npc != null)) {
                 create();
+
             // Npc hit a gravity object.
             } else if (npc != null && gravity != null) {
                 mRemovePhysicsActors.add(npc);
-            } // Don't care about anything else
+
+            // Actor entered a cell
+            } else if (gridCell != null) {
+                mGrid.onActorContact(other, gridCell, true);
+            }
+            // Don't care about anything else
         }
 
         @Override
         public void endContact(Contact contact) {
+            Object a = contact.getFixtureA().getUserData();
+            Object b = contact.getFixtureB().getUserData();
+            Grid.Cell gridCell = null;
+            Actor other = null;
+            if (a instanceof Grid.Cell) {
+                gridCell = (Grid.Cell) a;
+                other = (Actor) b;
+            }
+            if (b instanceof Grid.Cell) {
+                gridCell = (Grid.Cell) b;
+                other = (Actor) a;
+            }
 
+            // We only care about actors leaving a grid cell
+            if (gridCell != null) {
+                mGrid.onActorContact(other, gridCell, false);
+            }
         }
 
         @Override

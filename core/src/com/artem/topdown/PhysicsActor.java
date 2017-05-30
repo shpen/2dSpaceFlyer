@@ -21,8 +21,8 @@ public abstract class PhysicsActor extends ShapeActor {
 
     private float mMaxVelocity = -1;
 
-    public PhysicsActor(float x, float y, World world, BodyDef bodyDef, FixtureDef fixtureDef) {
-        setPosition(x, y);
+    public PhysicsActor(World world, BodyDef bodyDef, FixtureDef fixtureDef) {
+        setPosition(bodyDef.position.x, bodyDef.position.y);
         setSize(fixtureDef.shape.getRadius(), fixtureDef.shape.getRadius());
 
         mWorld = world;
@@ -34,7 +34,7 @@ public abstract class PhysicsActor extends ShapeActor {
         fixtureDef.shape.dispose();
     }
 
-    public PhysicsActor(float x, float y, float width, float height, World world, BodyDef.BodyType bodyType, float density) {
+    public PhysicsActor(float x, float y, float width, float height, World world, BodyDef.BodyType bodyType, boolean sensor, float density) {
         setPosition(x, y);
         setSize(width, height);
 
@@ -51,7 +51,11 @@ public abstract class PhysicsActor extends ShapeActor {
         // Create physics collision shape
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
-        mFixture = mBody.createFixture(boxShape, density);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = sensor;
+        fixtureDef.shape = boxShape;
+        fixtureDef.density = density;
+        mFixture = mBody.createFixture(fixtureDef);
         mFixture.setFriction(0);
         mFixture.setUserData(this);
         boxShape.dispose();
