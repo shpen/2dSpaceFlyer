@@ -16,9 +16,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TopDownGame extends ApplicationAdapter {
@@ -40,14 +39,18 @@ public class TopDownGame extends ApplicationAdapter {
     private Stage mStage;
 
     private PlayerActor mPlayer;
+    private PickupHintActor mPickupHintActor;
 
     private int mSpawnCounter;
 
     public static ShapeRenderer mShapeRenderer;
 
+    private HashSet<PickupActor> mPickups;
+
     @Override
     public void create() {
         mRemovePhysicsActors = new HashSet<PhysicsActor>();
+        mPickups = new HashSet<PickupActor>();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
@@ -72,6 +75,9 @@ public class TopDownGame extends ApplicationAdapter {
         // Create some random background elements
         fillGravityActors();
         fillNpcs();
+
+        mPickupHintActor = new PickupHintActor(mStage.getCamera());
+        mStage.addActor(mPickupHintActor);
         fillPickups();
     }
 
@@ -93,6 +99,8 @@ public class TopDownGame extends ApplicationAdapter {
             mSpawnCounter = 0;
             mStage.addActor(new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE));
         }
+
+        if (mPickups.isEmpty()) fillPickups();
 
         mStage.act();
 
@@ -127,9 +135,11 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillPickups() {
-        for (int i = 0; i < 10; i++) {
-            Actor pickup = new PickupActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+        for (int i = 0; i < 5; i++) {
+            PickupActor pickup = new PickupActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
             mStage.addActor(pickup);
+            mPickupHintActor.addPickupActor(pickup);
+            mPickups.add(pickup);
         }
     }
 
@@ -143,6 +153,7 @@ public class TopDownGame extends ApplicationAdapter {
             GravityActor gravity = null;
             Grid.Cell gridCell = null;
             Actor other = null;
+            PickupActor pickup = null;
             if (a instanceof NpcActor) npc = (NpcActor) a;
             if (b instanceof NpcActor) npc = (NpcActor) b;
             if (a instanceof PlayerActor) player = (PlayerActor) a;
@@ -157,10 +168,21 @@ public class TopDownGame extends ApplicationAdapter {
                 gridCell = (Grid.Cell) b;
                 other = (Actor) a;
             }
+            if (a instanceof PickupActor) pickup = (PickupActor) a;
+            if (b instanceof PickupActor) pickup = (PickupActor) b;
 
-            // Player hit something. Game over
-            if (player != null && (gravity != null || npc != null)) {
-                create();
+            // Player hit something
+            if (player != null && (gravity != null || npc != null || pickup != null)) {
+                // Yay!
+                if (pickup != null) {
+                    mRemovePhysicsActors.add(pickup);
+                    mPickups.remove(pickup);
+                    mPickupHintActor.removePickupActor(pickup);
+
+                // Oh no
+                } else {
+                    create();
+                }
 
             // Npc hit a gravity object.
             } else if (npc != null && gravity != null) {

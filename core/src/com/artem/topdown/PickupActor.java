@@ -27,7 +27,7 @@ public class PickupActor extends PhysicsActor {
 
         for (int i = 0; i < NUM_LAYERS; i++) {
             renderer.identity();
-            renderer.translate(getX() - OUTER_RADIUS / 2, getY() - OUTER_RADIUS / 2, 0);
+            renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
             renderer.rotate(0, 0, 1, mAnimationCounter * (float) Math.pow(-1, i) * 360);
 
             renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -41,7 +41,7 @@ public class PickupActor extends PhysicsActor {
         }
 
         renderer.identity();
-        renderer.translate(getX() - OUTER_RADIUS / 2, getY() - OUTER_RADIUS / 2, 0);
+        renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(COLOR);
         renderer.circle(0, 0, INNER_RADIUS, 6);
