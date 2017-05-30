@@ -23,7 +23,8 @@ public abstract class PhysicsActor extends ShapeActor {
 
     public PhysicsActor(World world, BodyDef bodyDef, FixtureDef fixtureDef) {
         setPosition(bodyDef.position.x, bodyDef.position.y);
-        setSize(fixtureDef.shape.getRadius(), fixtureDef.shape.getRadius());
+        float size = fixtureDef.shape.getRadius() * 2 * PHYSICS_TO_PIXEL_SCALE;
+        setSize(size, size);
 
         mWorld = world;
         mBody = mWorld.createBody(bodyDef);
@@ -110,17 +111,7 @@ public abstract class PhysicsActor extends ShapeActor {
         return super.remove();
     }
 
-    protected void setVelocity(Vector2 vec) {
-        mBody.setLinearVelocity(vec);
-    }
-
     protected Body getBody() {
         return mBody;
-    }
-
-    protected void enableCollision(boolean enable) {
-        Filter filter = mFixture.getFilterData();
-        filter.maskBits = (short) (enable ? -1 : 0);
-        mFixture.setFilterData(filter);
     }
 }

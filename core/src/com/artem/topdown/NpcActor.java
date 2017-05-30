@@ -7,20 +7,24 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class NpcActor extends PhysicsActor {
-    private static final float MOVE_SPEED = 6f;
-    private static final float FORWARD_ACCELERATION = 20f;
-    private static final float ROTATION_SPEED = 15f;
+    private static final float MAX_SPEED_PHYS = 6f;
+    private static final float FORWARD_ACCELERATION_PHYS = 20f;
+    private static final float ROTATION_FORCE_PHYS = 15f;
+    private static final float DENSITY_PHYS = 25f;
+    private static final float ANGULAR_DAMP_PHYS = 100f;
 
-    private static final float PLAYER_DISTANCE_LIMIT = 2000f;
-    private static final float PLAYER_ANGLE_TOLERANCE = 0.1f;
+    private static final float PLAYER_ANGLE_TOLERANCE_RAD = 0.1f;
+
+    private static final float WIDTH_PX = 7f;
+    private static final float HEIGHT_PX = 7f;
 
     private final PlayerActor mPlayer;
 
     public NpcActor(World world, PlayerActor player, float x, float y) {
-        super(x, y, 7, 7, world, BodyDef.BodyType.DynamicBody, false, 25f);
+        super(x, y, WIDTH_PX, HEIGHT_PX, world, BodyDef.BodyType.DynamicBody, false, DENSITY_PHYS);
         mPlayer = player;
-        getBody().setAngularDamping(100f);
-        setMaxVelocity(MOVE_SPEED);
+        getBody().setAngularDamping(ANGULAR_DAMP_PHYS);
+        setMaxVelocity(MAX_SPEED_PHYS);
     }
 
     @Override
@@ -39,31 +43,23 @@ public class NpcActor extends PhysicsActor {
         float selfAngle = (getBody().getAngle() + (float) Math.PI / 2) % ((float) Math.PI * 2);
         if (selfAngle > Math.PI) selfAngle -= Math.PI * 2;
         float angularImpulse = 0;
-        float acceleration = FORWARD_ACCELERATION;
-        if (playerDir.len() < PLAYER_DISTANCE_LIMIT) {
-            float angleDelta = getAngleDelta(selfAngle, playerAngle);
-            //Gdx.app.log("NpcActor", "playerAngle: " + playerAngle + " selfAngle: " + selfAngle + " angleDelta: " + angleDelta);
-            if (angleDelta < - PLAYER_ANGLE_TOLERANCE) {
-                angularImpulse = ROTATION_SPEED;
-            } else if (angleDelta > PLAYER_ANGLE_TOLERANCE) {
-                angularImpulse = -ROTATION_SPEED;
-            }
-
-            acceleration *= 1;// - (Math.abs(angleDelta) / Math.PI);
-        } else {
-
+        float angleDelta = getAngleDelta(selfAngle, playerAngle);
+        //Gdx.app.log("NpcActor", "playerAngle: " + playerAngle + " selfAngle: " + selfAngle + " angleDelta: " + angleDelta);
+        if (angleDelta < -PLAYER_ANGLE_TOLERANCE_RAD) {
+            angularImpulse = ROTATION_FORCE_PHYS;
+        } else if (angleDelta > PLAYER_ANGLE_TOLERANCE_RAD) {
+            angularImpulse = -ROTATION_FORCE_PHYS;
         }
         getBody().applyAngularImpulse(angularImpulse, true);
 
-
-        /*getBody().applyLinearImpulse(Vector2.X.rotateRad(selfAngle).scl(acceleration),
-                getBody().getWorldCenter(), true);*/
-
         float angle = getBody().getAngle();
-        Vector2 accelVel = new Vector2(0, 1).rotateRad(angle).scl(acceleration);
+        Vector2 accelVel = new Vector2(0, 1).rotateRad(angle).scl(FORWARD_ACCELERATION_PHYS);
         getBody().applyLinearImpulse(accelVel, getBody().getWorldCenter(), true);
     }
 
+    /**
+     * Complex math stolen from StackOverflow to get angle delta in a usable range in radians.
+     */
     private float getAngleDelta(float current, float target) {
         float diff = Math.abs(current - target) % ((float) Math.PI * 2);
         float delta = diff > ((float) Math.PI * 1) ? ((float) Math.PI * 2) - diff : diff;

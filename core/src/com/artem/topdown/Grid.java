@@ -1,6 +1,5 @@
 package com.artem.topdown;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Grid {
@@ -18,7 +16,7 @@ public class Grid {
         int y;
     }
 
-    private static final float GRID_SIZE = 50f;
+    private static final float GRID_SIZE_PHYS = 50f;
 
     private final Fixture[][] mCells;
     private final HashSet<Actor>[][] mActors;
@@ -26,17 +24,17 @@ public class Grid {
     private Cell mPlayerCell;
 
     public Grid(World world, float worldSize) {
-        int dimension = (int) (worldSize / GRID_SIZE) + 1;
+        int dimension = (int) (worldSize / GRID_SIZE_PHYS) + 1;
         mCells = new Fixture[dimension][dimension];
         mActors = new HashSet[dimension][dimension];
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(GRID_SIZE / 2, GRID_SIZE / 2);
+        shape.setAsBox(GRID_SIZE_PHYS / 2, GRID_SIZE_PHYS / 2);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                bodyDef.position.set(i * GRID_SIZE, j * GRID_SIZE);
+                bodyDef.position.set(i * GRID_SIZE_PHYS, j * GRID_SIZE_PHYS);
                 Body body = world.createBody(bodyDef);
 
                 FixtureDef fixtureDef = new FixtureDef();

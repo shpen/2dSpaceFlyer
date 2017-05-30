@@ -1,18 +1,28 @@
 package com.artem.topdown;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-import static com.artem.topdown.TopDownGame.PHYSICS_TO_PIXEL_SCALE;
 import static com.artem.topdown.TopDownGame.PIXEL_TO_PHYSICS_SCALE;
 
 public class GravityActor extends PhysicsActor {
+    private static final float SIZE_RANGE_PX = 60f;
+    private static final float SIZE_MIN_PX = 20f;
+
+    private static final float BASE_FACTOR = 20f;
+    private static final float ATTRACT_FACTOR = 0.9f;
+    private static final float REPEL_FACTOR = -1.5f;
+
     private static final int NUM_OUTER_LINES = 4;
-    private static final float OUTER_LINES_SPACING = 20f;
+    private static final float OUTER_LINES_SPACING_FACTOR = 0.4f;
     private static final float ANIMATION_RATE = 0.02f;
+
+    private static final Color ATTRACT_COLOR = new Color(1, 0.7f, 0, 1);
+    private static final Color REPEL_COLOR = new Color(0, 0.7f, 1, 1);
 
     private final boolean mAttract;
     private final float mGravity;
@@ -24,15 +34,14 @@ public class GravityActor extends PhysicsActor {
     public GravityActor(World world, float x, float y) {
         super(world,
                 generateBodyDef(x, y),
-                generateFixtureDef((float) Math.random() * 60f + 20f));
-        float radius = getBody().getFixtureList().first().getShape().getRadius() * PHYSICS_TO_PIXEL_SCALE;
-        setSize(radius*2, radius*2);
-        //setOrigin(radius + getX(), radius + getY());
-        mAttract = Math.random() > 0.5f;
-        mGravity = 20f * radius * (mAttract ? 0.7f : -1.5f);
-        setColor(mAttract ? 1 : 0, 0.7f, mAttract ? 0 : 1, 1f);
+                generateFixtureDef((float) Math.random() * SIZE_RANGE_PX + SIZE_MIN_PX));
 
-        mOuterLinesSpacing = OUTER_LINES_SPACING * radius / 50;
+        float radius = getWidth() / 2;
+        mAttract = Math.random() > 0.5f;
+        mGravity = BASE_FACTOR * radius * (mAttract ? ATTRACT_FACTOR : REPEL_FACTOR);
+        setColor(mAttract ? ATTRACT_COLOR : REPEL_COLOR);
+
+        mOuterLinesSpacing = OUTER_LINES_SPACING_FACTOR * radius;
         mMaxOuterLineDistance = mOuterLinesSpacing * NUM_OUTER_LINES;
     }
 
@@ -66,7 +75,6 @@ public class GravityActor extends PhysicsActor {
     }
 
     private static BodyDef generateBodyDef(float x, float y) {
-        // Create physics body
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.StaticBody;
         def.position.set(x * PIXEL_TO_PHYSICS_SCALE, y * PIXEL_TO_PHYSICS_SCALE);
@@ -75,9 +83,8 @@ public class GravityActor extends PhysicsActor {
     }
 
     private static FixtureDef generateFixtureDef(float radius) {
-        // Create physics collision shape
         CircleShape shape = new CircleShape();
-        shape.setRadius(radius * PIXEL_TO_PHYSICS_SCALE);    //.setAsBox(getWidth() / 2 * PIXEL_TO_PHYSICS_SCALE, getHeight() / 2 * PIXEL_TO_PHYSICS_SCALE);
+        shape.setRadius(radius * PIXEL_TO_PHYSICS_SCALE);
         FixtureDef def = new FixtureDef();
         def.shape = shape;
         def.isSensor = true;
