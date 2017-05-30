@@ -34,13 +34,13 @@ public class PickupHintActor extends ShapeActor {
 
     @Override
     protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
-        float radius = Math.min(mCamera.viewportWidth, mCamera.viewportHeight) / 2 * 0.9f;
+        float radius = Math.min(mCamera.viewportWidth, mCamera.viewportHeight) / 2 * 0.95f;
 
         // Draw full circle
-        renderer.setColor(RING_COLOR);
+        /*renderer.setColor(RING_COLOR);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.circle(mCamera.position.x, mCamera.position.y, radius);
-        renderer.end();
+        renderer.end();*/
 
         // Draw arrows to each pickup
         for (PickupActor pickup : mPickupActors) {
@@ -50,12 +50,14 @@ public class PickupHintActor extends ShapeActor {
             float angle = direction.angle();
 
             renderer.setColor(ARROW_COLOR);
-            renderer.begin(ShapeRenderer.ShapeType.Line);
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
             renderer.identity();
             renderer.translate(mCamera.position.x, mCamera.position.y, 0);
             renderer.rotate(0, 0, 1, angle + 90);
             renderer.translate(0, radius, 0);
-            renderer.line(0, 0, 0, 10);
+            renderer.triangle(-4, 0, 0, 3, 4, 0);
+            /*renderer.line(-4, 0, 0, 5);
+            renderer.line(4, 0, 0, 5);*/
             renderer.end();
         }
     }
