@@ -13,7 +13,7 @@ public class GravityActor extends PhysicsActor {
     private static final float SIZE_RANGE_PX = 60f;
     private static final float SIZE_MIN_PX = 20f;
 
-    private static final float BASE_FACTOR = 20f;
+    private static final float BASE_FACTOR = 15f;
     private static final float ATTRACT_FACTOR = 0.9f;
     private static final float REPEL_FACTOR = -1.5f;
 

@@ -82,8 +82,8 @@ public abstract class PhysicsActor extends ShapeActor {
                     GravityActor actor = (GravityActor) body.getUserData();
 
                     Vector2 direction = body.getPosition().sub(mBody.getPosition());
-                    float distanceSqr = direction.len2();
-                    Vector2 gravity = direction.nor().scl(actor.getGravity()).scl(1 / distanceSqr);
+                    float distanceFactor = (float) Math.pow(direction.len2(), 0.9);
+                    Vector2 gravity = direction.nor().scl(actor.getGravity()).scl(1 / distanceFactor);
                     mBody.applyLinearImpulse(gravity, mBody.getWorldCenter(), true);
                 }
             }
