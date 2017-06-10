@@ -7,10 +7,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class NpcActor extends PhysicsActor {
-    private static final float MAX_SPEED_PHYS = 6f;
-    private static final float FORWARD_ACCELERATION_PHYS = 20f;
+    private static final float MAX_SPEED_PHYS = 8f;
+    private static final float FORWARD_ACCELERATION_PHYS = 25f;
     private static final float ROTATION_FORCE_PHYS = 15f;
-    private static final float DENSITY_PHYS = 25f;
+    private static final float DENSITY_PHYS = 100f;
     private static final float ANGULAR_DAMP_PHYS = 100f;
 
     private static final float PLAYER_ANGLE_TOLERANCE_RAD = 0.1f;
