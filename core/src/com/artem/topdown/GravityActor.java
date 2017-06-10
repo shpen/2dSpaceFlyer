@@ -46,7 +46,7 @@ public class GravityActor extends PhysicsActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         float centerX = getX() + getWidth() / 2;
         float centerY = getY() + getHeight() / 2;
 
@@ -68,6 +68,8 @@ public class GravityActor extends PhysicsActor {
             renderer.circle(centerX, centerY, getWidth() / 2 + distance);
             renderer.end();
         }
+
+        return false;
     }
 
     public float getGravity() {

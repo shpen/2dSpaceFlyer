@@ -24,12 +24,11 @@ public class PickupActor extends PhysicsActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         mAnimationCounter += ANIMATION_RATE;
         if (mAnimationCounter > 1) mAnimationCounter = 0;
 
         for (int i = 0; i < NUM_LAYERS; i++) {
-            renderer.identity();
             renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
             renderer.rotate(0, 0, 1, mAnimationCounter * (float) Math.pow(-1, i) * FULL_CIRCLE_DEG);
 
@@ -41,13 +40,15 @@ public class PickupActor extends PhysicsActor {
             renderer.circle(0, 0, OUTER_RADIUS - (OUTER_RADIUS - INNER_RADIUS) * i / (float) NUM_LAYERS, NUM_POLYGON_SIDES);
 
             renderer.end();
+            renderer.identity();
         }
 
-        renderer.identity();
         renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(COLOR);
         renderer.circle(0, 0, INNER_RADIUS, NUM_POLYGON_SIDES);
         renderer.end();
+
+        return true;
     }
 }

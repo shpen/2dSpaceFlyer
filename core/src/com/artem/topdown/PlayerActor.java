@@ -37,14 +37,15 @@ public class PlayerActor extends PhysicsActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.WHITE);
-        renderer.identity();
         renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
         renderer.rotate(0, 0, 1, (float) Math.toDegrees(getBody().getAngle()));
         renderer.triangle(mVerts[0], mVerts[1], mVerts[2], mVerts[3], mVerts[6], mVerts[7]);
         renderer.triangle(mVerts[2], mVerts[3], mVerts[4], mVerts[5], mVerts[6], mVerts[7]);
+
+        return true;
     }
 
     @Override

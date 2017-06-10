@@ -28,12 +28,14 @@ public class NpcActor extends PhysicsActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         renderer.setColor(Color.RED);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.translate(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
         renderer.rotate(0, 0, 1, getRotation());
         renderer.rect(-getWidth() / 2, -getHeight() / 2, getWidth(), getHeight());
+
+        return true;
     }
 
     @Override

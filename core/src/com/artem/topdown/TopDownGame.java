@@ -132,6 +132,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         mStage.getCamera().update();
 
+        mShapeRenderer.setProjectionMatrix(mStage.getCamera().combined);
         mStage.draw();
 
         //mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));

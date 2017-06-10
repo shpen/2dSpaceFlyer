@@ -15,10 +15,13 @@ public abstract class ShapeActor extends Actor {
         batch.end();
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        sRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        sRenderer.identity();
+        //sRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        //sRenderer.identity();
 
-        onDraw(sRenderer, parentAlpha);
+        if (onDraw(sRenderer, parentAlpha)) {
+            sRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            sRenderer.identity();
+        }
 
         // Tear down
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -26,5 +29,8 @@ public abstract class ShapeActor extends Actor {
         batch.begin();
     }
 
-    protected abstract void onDraw(ShapeRenderer renderer, float parentAlpha);
+    /**
+     * @return true if the renderer matrix is modified, so it can be properly reset
+     */
+    protected abstract boolean onDraw(ShapeRenderer renderer, float parentAlpha);
 }

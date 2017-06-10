@@ -31,7 +31,7 @@ public class BackgroundActor extends ShapeActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
 
         // Draw
@@ -39,5 +39,7 @@ public class BackgroundActor extends ShapeActor {
             renderer.setColor(1, 1, 1, mA[i]);
             renderer.circle(mX[i], mY[i], mR[i]);
         }
+
+        return false;
     }
 }

@@ -23,11 +23,10 @@ public class PlayerJetActor extends ShapeActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         float inversePercent = 1 - mDistance / MAX_DISTANCE;
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(new Color(1, 1, 1, inversePercent));
-        renderer.identity();
         renderer.translate(mX, mY, 0);
         renderer.rotate(0, 0, 1, mAngle);
         renderer.translate(0, -mDistance - INITIAL_DISTANCE, 0);
@@ -35,6 +34,8 @@ public class PlayerJetActor extends ShapeActor {
         renderer.rect(-width / 2, -HEIGHT / 2, width * inversePercent, HEIGHT * inversePercent);
         //renderer.line(-WIDTH, -HEIGHT / 2, 0, INITIAL_DISTANCE - HEIGHT / 2);
         //renderer.line(0, INITIAL_DISTANCE - HEIGHT / 2, WIDTH, -HEIGHT / 2);
+
+        return true;
     }
 
     @Override

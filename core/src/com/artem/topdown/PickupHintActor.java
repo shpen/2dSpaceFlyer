@@ -33,7 +33,7 @@ public class PickupHintActor extends ShapeActor {
     }
 
     @Override
-    protected void onDraw(ShapeRenderer renderer, float parentAlpha) {
+    protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         float radius = Math.min(mCamera.viewportWidth, mCamera.viewportHeight) / 2 * 0.95f;
 
         // Draw full circle
@@ -51,7 +51,6 @@ public class PickupHintActor extends ShapeActor {
 
             renderer.setColor(ARROW_COLOR);
             renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.identity();
             renderer.translate(mCamera.position.x, mCamera.position.y, 0);
             renderer.rotate(0, 0, 1, angle + 90);
             renderer.translate(0, radius, 0);
@@ -59,6 +58,9 @@ public class PickupHintActor extends ShapeActor {
             /*renderer.line(-4, 0, 0, 5);
             renderer.line(4, 0, 0, 5);*/
             renderer.end();
+            renderer.identity();
         }
+
+        return true;
     }
 }
