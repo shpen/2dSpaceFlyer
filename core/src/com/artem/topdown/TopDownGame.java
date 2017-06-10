@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TopDownGame extends ApplicationAdapter {
@@ -52,6 +51,7 @@ public class TopDownGame extends ApplicationAdapter {
     public static ShapeRenderer mShapeRenderer;
 
     private HashSet<PickupActor> mPickups;
+    private HashSet<GravityActor> mGravities;
 
     @Override
     public void create() {
@@ -59,6 +59,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         mRemovePhysicsActors = new HashSet<PhysicsActor>();
         mPickups = new HashSet<PickupActor>();
+        mGravities = new HashSet<GravityActor>();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
@@ -90,7 +91,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         // Create some random background elements
         fillGravityActors();
-        //fillNpcs();
+        fillNpcs();
 
         mPickupHintActor = new PickupHintActor(mStage.getCamera());
         mStage.addActor(mPickupHintActor);
@@ -160,10 +161,37 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillGravityActors() {
-        for (int i = 0; i < 40; i++) {
-            Actor box = new GravityActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
-            mStage.addActor(box);
+        while (mGravities.size() < 40) {
+            float x = (float) Math.random() * WORLD_SIZE;
+            float y = (float) Math.random() * WORLD_SIZE;
+
+            // We create the actor before distance testing, because it needs to generate a random radius
+            GravityActor newActor = new GravityActor(mWorld, x, y);
+
+            if (!isValidSpawn(x, y, newActor.getRadius())) {
+                newActor.remove();
+                continue;
+            }
+
+            mStage.addActor(newActor);
+            mGravities.add(newActor);
         }
+    }
+
+    private boolean isValidSpawn(float x, float y, float radius) {
+        // Don't spawn too close to player start
+        float playerDistanceLimit = 200f;
+        if (Math.abs(x - mPlayer.getX()) < playerDistanceLimit || Math.abs(y - mPlayer.getY()) < playerDistanceLimit) return false;
+
+        // Don't spawn too close too other gravity actors
+        for (GravityActor actor : mGravities) {
+            float dist = (float) Math.sqrt(Math.pow(x - actor.getX(), 2) + Math.pow(y - actor.getY(), 2));
+            if (dist < (radius + actor.getRadius()) * 1.4) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void fillNpcs() {
@@ -175,7 +203,14 @@ public class TopDownGame extends ApplicationAdapter {
 
     private void fillPickups() {
         for (int i = 0; i < 5; i++) {
-            PickupActor pickup = new PickupActor(mWorld, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+            float x;
+            float y;
+            do {
+                x = (float) Math.random() * WORLD_SIZE;
+                y = (float) Math.random() * WORLD_SIZE;
+            } while (!isValidSpawn(x, y, 20));
+
+            PickupActor pickup = new PickupActor(mWorld, x, y);
             mStage.addActor(pickup);
             mPickupHintActor.addPickupActor(pickup);
             mPickups.add(pickup);

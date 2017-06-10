@@ -24,6 +24,7 @@ public class GravityActor extends PhysicsActor {
     private static final Color ATTRACT_COLOR = new Color(1, 0.7f, 0, 1);
     private static final Color REPEL_COLOR = new Color(0, 0.7f, 1, 1);
 
+    private final float mRadius;
     private final boolean mAttract;
     private final float mGravity;
     private final float mOuterLinesSpacing;
@@ -36,12 +37,12 @@ public class GravityActor extends PhysicsActor {
                 generateBodyDef(x, y),
                 generateFixtureDef((float) Math.random() * SIZE_RANGE_PX + SIZE_MIN_PX));
 
-        float radius = getWidth() / 2;
+        mRadius = getWidth() / 2;
         mAttract = Math.random() > 0.5f;
-        mGravity = BASE_FACTOR * radius * (mAttract ? ATTRACT_FACTOR : REPEL_FACTOR);
+        mGravity = BASE_FACTOR * mRadius * (mAttract ? ATTRACT_FACTOR : REPEL_FACTOR);
         setColor(mAttract ? ATTRACT_COLOR : REPEL_COLOR);
 
-        mOuterLinesSpacing = OUTER_LINES_SPACING_FACTOR * radius;
+        mOuterLinesSpacing = OUTER_LINES_SPACING_FACTOR * mRadius;
         mMaxOuterLineDistance = mOuterLinesSpacing * NUM_OUTER_LINES;
     }
 
@@ -70,6 +71,10 @@ public class GravityActor extends PhysicsActor {
         }
 
         return false;
+    }
+
+    public float getRadius() {
+        return mRadius;
     }
 
     public float getGravity() {
