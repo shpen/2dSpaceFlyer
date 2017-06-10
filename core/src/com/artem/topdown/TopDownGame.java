@@ -1,5 +1,6 @@
 package com.artem.topdown;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -71,7 +72,14 @@ public class TopDownGame extends ApplicationAdapter {
 
         mShapeRenderer = new ShapeRenderer();
 
-        mStage = new Stage(new ExtendViewport(VIEWPORT_SIZE, VIEWPORT_SIZE * ASPECT_RATIO));
+        float width = VIEWPORT_SIZE;
+        float height = VIEWPORT_SIZE;
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            width *= ASPECT_RATIO;
+        } else {
+            height *= ASPECT_RATIO;
+        }
+        mStage = new Stage(new ExtendViewport(width, height));
         Gdx.input.setInputProcessor(mStage);
 
         mStage.addActor(new BackgroundActor(WORLD_SIZE));
