@@ -31,6 +31,9 @@ public class TopDownGame extends ApplicationAdapter {
     private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.1f;
 
+    private static final float BASE_GAME_SPEED = 1/60f;
+    private static final float GAME_SPEED_ADD = BASE_GAME_SPEED / 10000f;
+
     private HashSet<PhysicsActor> mRemovePhysicsActors;
 
     private World mWorld;
@@ -42,6 +45,7 @@ public class TopDownGame extends ApplicationAdapter {
     private PlayerActor mPlayer;
     private PickupHintActor mPickupHintActor;
 
+    private float mGameSpeed;
     private int mSpawnCounter;
 
     public static ShapeRenderer mShapeRenderer;
@@ -50,6 +54,8 @@ public class TopDownGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        mGameSpeed = BASE_GAME_SPEED;
+
         mRemovePhysicsActors = new HashSet<PhysicsActor>();
         mPickups = new HashSet<PickupActor>();
 
@@ -136,7 +142,8 @@ public class TopDownGame extends ApplicationAdapter {
         mStage.draw();
 
         //mDebugRenderer.render(mWorld, mStage.getCamera().combined.scl(PHYSICS_TO_PIXEL_SCALE));
-        mWorld.step(1/60f, 6, 2);
+        mWorld.step(mGameSpeed, 6, 2);
+        mGameSpeed += GAME_SPEED_ADD;
     }
 
     @Override
