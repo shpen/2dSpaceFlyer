@@ -1,6 +1,8 @@
 package com.artem.topdown;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -24,6 +26,9 @@ public class GravityActor extends PhysicsActor {
     private static final Color ATTRACT_COLOR = new Color(1, 0.7f, 0, 1);
     private static final Color REPEL_COLOR = new Color(0, 0.7f, 1, 1);
 
+    private static final Texture CIRCLE_TEX = new Texture("circle.png");
+    private static final Texture RING_TEX = new Texture("ring.png");
+
     private final boolean mAttract;
     private final float mGravity;
     private final float mOuterLinesSpacing;
@@ -43,6 +48,24 @@ public class GravityActor extends PhysicsActor {
 
         mOuterLinesSpacing = OUTER_LINES_SPACING_FACTOR * radius;
         mMaxOuterLineDistance = mOuterLinesSpacing * NUM_OUTER_LINES;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        mAnimationCounter += ANIMATION_RATE;
+        if (mAnimationCounter > 1f) mAnimationCounter = 0;
+
+        // Draw solid circle
+        batch.setColor(getColor());
+        batch.draw(CIRCLE_TEX, getX(), getY(), getWidth(), getHeight());
+
+        // Draw outer animating lines
+        for (int i = 0; i < NUM_OUTER_LINES; i++) {
+            float distance = mOuterLinesSpacing * (i + mAnimationCounter);
+            if (mAttract) distance = mMaxOuterLineDistance - distance;
+            batch.setColor(getColor().cpy().add(0, 0, 0, -distance / mMaxOuterLineDistance));
+            batch.draw(RING_TEX, getX() - distance / 2, getY() - distance / 2, getWidth() + distance, getHeight() + distance);
+        }
     }
 
     @Override

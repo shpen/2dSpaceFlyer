@@ -10,7 +10,7 @@ public abstract class ShapeActor extends Actor {
     private static final ShapeRenderer sRenderer = new ShapeRenderer();
 
     @Override
-    public final void draw(Batch batch, float parentAlpha) {
+    public /*final*/ void draw(Batch batch, float parentAlpha) {
         // Setup
         batch.end();
         Gdx.gl.glEnable(GL20.GL_BLEND);
