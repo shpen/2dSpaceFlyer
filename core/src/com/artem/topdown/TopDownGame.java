@@ -139,8 +139,8 @@ public class TopDownGame extends ApplicationAdapter {
         camPos.slerp(new Vector3(mPlayer.getX(), mPlayer.getY(), 0), CAMERA_FOLLOW_SPEED);
 
         // Prevent camera from moving off world
-        float halfViewportWidth = mStage.getViewport().getScreenWidth() / 2;
-        float halfViewportHeight = mStage.getViewport().getScreenHeight() / 2;
+        float halfViewportWidth = mStage.getCamera().viewportWidth / 2;
+        float halfViewportHeight = mStage.getCamera().viewportHeight / 2;
         camPos.x = MathUtils.clamp(camPos.x, halfViewportWidth, WORLD_SIZE - halfViewportWidth);
         camPos.y = MathUtils.clamp(camPos.y, halfViewportHeight, WORLD_SIZE - halfViewportHeight);
 
