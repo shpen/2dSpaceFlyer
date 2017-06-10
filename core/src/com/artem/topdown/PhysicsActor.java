@@ -36,7 +36,7 @@ public abstract class PhysicsActor extends ShapeActor {
     }
 
     public PhysicsActor(float x, float y, float width, float height, World world, BodyDef.BodyType bodyType, boolean sensor, float density) {
-        setPosition(x, y);
+        setPosition(x * PIXEL_TO_PHYSICS_SCALE, y * PIXEL_TO_PHYSICS_SCALE);
         setSize(width, height);
 
         mWorld = world;

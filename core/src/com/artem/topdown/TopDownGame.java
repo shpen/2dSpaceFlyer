@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2D;
@@ -74,7 +75,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         // Create some random background elements
         fillGravityActors();
-        fillNpcs();
+        //fillNpcs();
 
         mPickupHintActor = new PickupHintActor(mStage.getCamera());
         mStage.addActor(mPickupHintActor);
@@ -95,6 +96,20 @@ public class TopDownGame extends ApplicationAdapter {
         }
         mRemovePhysicsActors.clear();
 
+        // Remove actors off map boundaries
+        for (Actor actor : mStage.getActors()) {
+            if (actor instanceof PlayerActor || actor instanceof NpcActor) {
+                if (actor.getX() < 0 || actor.getX() > WORLD_SIZE
+                        || actor.getY() < 0 || actor.getY() > WORLD_SIZE) {
+                    if (actor instanceof PlayerActor) {
+                        create();
+                        return;
+                    }
+                    actor.remove();
+                }
+            }
+        }
+
         if(mSpawnCounter++ == 100) {
             mSpawnCounter = 0;
             mStage.addActor(new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE));
@@ -107,6 +122,12 @@ public class TopDownGame extends ApplicationAdapter {
         // Follow player
         Vector3 camPos = mStage.getCamera().position;
         camPos.slerp(new Vector3(mPlayer.getX(), mPlayer.getY(), 0), CAMERA_FOLLOW_SPEED);
+
+        float halfViewportWidth = mStage.getViewport().getScreenWidth() / 2;
+        float halfViewportHeight = mStage.getViewport().getScreenHeight() / 2;
+        camPos.x = MathUtils.clamp(camPos.x, halfViewportWidth, WORLD_SIZE - halfViewportWidth);
+        camPos.y = MathUtils.clamp(camPos.y, halfViewportHeight, WORLD_SIZE - halfViewportHeight);
+
         mStage.getCamera().update();
 
         mStage.draw();
