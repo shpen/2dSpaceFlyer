@@ -72,6 +72,7 @@ public class TopDownGame extends ApplicationAdapter {
 
         mPlayer = new PlayerActor(mWorld, WORLD_SIZE / 2, WORLD_SIZE / 2);
         mStage.addActor(mPlayer);
+        mStage.getCamera().position.set(mPlayer.getX(), mPlayer.getY(), 0);
 
         // Create some random background elements
         fillGravityActors();
@@ -123,6 +124,7 @@ public class TopDownGame extends ApplicationAdapter {
         Vector3 camPos = mStage.getCamera().position;
         camPos.slerp(new Vector3(mPlayer.getX(), mPlayer.getY(), 0), CAMERA_FOLLOW_SPEED);
 
+        // Prevent camera from moving off world
         float halfViewportWidth = mStage.getViewport().getScreenWidth() / 2;
         float halfViewportHeight = mStage.getViewport().getScreenHeight() / 2;
         camPos.x = MathUtils.clamp(camPos.x, halfViewportWidth, WORLD_SIZE - halfViewportWidth);
