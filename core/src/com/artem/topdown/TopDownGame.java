@@ -179,6 +179,10 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private boolean isValidSpawn(float x, float y, float radius) {
+        // Don't spawn too close to edge
+        float edgeLimit = 100f;
+        if (x < edgeLimit || y < edgeLimit || x > WORLD_SIZE - edgeLimit || y > WORLD_SIZE - edgeLimit) return false;
+
         // Don't spawn too close to player start
         float playerDistanceLimit = 200f;
         if (Math.abs(x - mPlayer.getX()) < playerDistanceLimit || Math.abs(y - mPlayer.getY()) < playerDistanceLimit) return false;
@@ -195,8 +199,14 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillNpcs() {
-        for (int i = 0; i < 10; i++) {
-            Actor npc = new NpcActor(mWorld, mPlayer, (float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+        for (int i = 0; i < 100; i++) {
+            float x;
+            float y;
+            do {
+                x = (float) Math.random() * WORLD_SIZE;
+                y = (float) Math.random() * WORLD_SIZE;
+            } while (!isValidSpawn(x, y, 20));
+            Actor npc = new NpcActor(mWorld, mPlayer, x, y);
             mStage.addActor(npc);
         }
     }
