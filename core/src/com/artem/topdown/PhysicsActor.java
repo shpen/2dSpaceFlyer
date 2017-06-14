@@ -75,17 +75,11 @@ public abstract class PhysicsActor extends ShapeActor {
 
         // Apply local gravity
         if (mBody.getType() == BodyDef.BodyType.DynamicBody) {
-            Array<Body> bodies = new Array<Body>();
-            mWorld.getBodies(bodies);
-            for (Body body : bodies) {
-                if (body.getUserData() instanceof GravityActor) {
-                    GravityActor actor = (GravityActor) body.getUserData();
-
-                    Vector2 direction = body.getPosition().sub(mBody.getPosition());
-                    float distanceFactor = (float) Math.pow(direction.len2(), 0.9);
-                    Vector2 gravity = direction.nor().scl(actor.getGravity()).scl(1 / distanceFactor);
-                    mBody.applyLinearImpulse(gravity, mBody.getWorldCenter(), true);
-                }
+            for (GravityActor actor : TopDownGame.mGravities) {
+                Vector2 direction = actor.getBody().getPosition().sub(mBody.getPosition());
+                float distanceFactor = (float) Math.pow(direction.len2(), 0.9);
+                Vector2 gravity = direction.nor().scl(actor.getGravity()).scl(1 / distanceFactor);
+                mBody.applyLinearImpulse(gravity, mBody.getWorldCenter(), true);
             }
         }
 

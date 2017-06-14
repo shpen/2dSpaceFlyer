@@ -51,7 +51,7 @@ public class TopDownGame extends ApplicationAdapter {
     public static ShapeRenderer mShapeRenderer;
 
     private HashSet<PickupActor> mPickups;
-    private HashSet<GravityActor> mGravities;
+    public static HashSet<GravityActor> mGravities;
     private GravityGroup mGravityGroup;
 
     @Override
