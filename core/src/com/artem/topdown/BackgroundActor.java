@@ -6,7 +6,7 @@ public class BackgroundActor extends ShapeActor {
     private static final int NUM_POINTS = 200;
 
     private static final float ALPHA_MIN = 0.2f;
-    private static final float ALPHA_RANGE = 0.5f;
+    private static final float ALPHA_RANGE = 0.4f;
 
     private static final float RADIUS_MIN_PX = 0.5f;
     private static final float RADIUS_RANGE_PX = 1f;

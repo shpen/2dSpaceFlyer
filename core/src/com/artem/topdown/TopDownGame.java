@@ -27,7 +27,7 @@ public class TopDownGame extends ApplicationAdapter {
 
     private static final float WORLD_SIZE = 2000f;
 
-    private static final float ASPECT_RATIO = 16f / 9f;
+    private static final float ASPECT_RATIO = 1.5f;
     private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.05f;
 
@@ -52,6 +52,7 @@ public class TopDownGame extends ApplicationAdapter {
 
     private HashSet<PickupActor> mPickups;
     private HashSet<GravityActor> mGravities;
+    private GravityGroup mGravityGroup;
 
     @Override
     public void create() {
@@ -60,6 +61,7 @@ public class TopDownGame extends ApplicationAdapter {
         mRemovePhysicsActors = new HashSet<PhysicsActor>();
         mPickups = new HashSet<PickupActor>();
         mGravities = new HashSet<GravityActor>();
+        mGravityGroup = new GravityGroup();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
@@ -161,70 +163,64 @@ public class TopDownGame extends ApplicationAdapter {
     }
 
     private void fillGravityActors() {
+        mStage.addActor(mGravityGroup);
         while (mGravities.size() < 40) {
-            float x = (float) Math.random() * WORLD_SIZE;
-            float y = (float) Math.random() * WORLD_SIZE;
-
-            // We create the actor before distance testing, because it needs to generate a random radius
-            GravityActor newActor = new GravityActor(mWorld, x, y);
-
-            if (!isValidSpawn(x, y, newActor.getRadius())) {
-                newActor.remove();
-                continue;
-            }
-
-            mStage.addActor(newActor);
+            float radius = GravityActor.generateRadius();
+            Vector2 spawnPoint = getValidSpawnPoint(radius);
+            GravityActor newActor = new GravityActor(mWorld, spawnPoint.x, spawnPoint.y, radius);
+            mGravityGroup.addActor(newActor);
+            //mStage.addActor(newActor);
             mGravities.add(newActor);
         }
     }
 
-    private boolean isValidSpawn(float x, float y, float radius) {
-        // Don't spawn too close to edge
-        float edgeLimit = 100f;
-        if (x < edgeLimit || y < edgeLimit || x > WORLD_SIZE - edgeLimit || y > WORLD_SIZE - edgeLimit) return false;
-
-        // Don't spawn too close to player start
-        float playerDistanceLimit = 200f;
-        if (Math.abs(x - mPlayer.getX()) < playerDistanceLimit || Math.abs(y - mPlayer.getY()) < playerDistanceLimit) return false;
-
-        // Don't spawn too close too other gravity actors
-        for (GravityActor actor : mGravities) {
-            float dist = (float) Math.sqrt(Math.pow(x - actor.getX(), 2) + Math.pow(y - actor.getY(), 2));
-            if (dist < (radius + actor.getRadius()) * 1.4) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private void fillNpcs() {
         for (int i = 0; i < 10; i++) {
-            float x;
-            float y;
-            do {
-                x = (float) Math.random() * WORLD_SIZE;
-                y = (float) Math.random() * WORLD_SIZE;
-            } while (!isValidSpawn(x, y, 20));
-            Actor npc = new NpcActor(mWorld, mPlayer, x, y);
+            Vector2 spawnPoint = getValidSpawnPoint(100);
+            Actor npc = new NpcActor(mWorld, mPlayer, spawnPoint.x, spawnPoint.y);
             mStage.addActor(npc);
         }
     }
 
     private void fillPickups() {
         for (int i = 0; i < 5; i++) {
-            float x;
-            float y;
-            do {
-                x = (float) Math.random() * WORLD_SIZE;
-                y = (float) Math.random() * WORLD_SIZE;
-            } while (!isValidSpawn(x, y, 20));
-
-            PickupActor pickup = new PickupActor(mWorld, x, y);
+            Vector2 spawnPoint = getValidSpawnPoint(30);
+            PickupActor pickup = new PickupActor(mWorld, spawnPoint.x, spawnPoint.y);
             mStage.addActor(pickup);
             mPickupHintActor.addPickupActor(pickup);
             mPickups.add(pickup);
         }
+    }
+
+    private Vector2 getValidSpawnPoint(float radius) {
+        Vector2 point = new Vector2();
+        outer:
+        do {
+            // Create random point
+            point.set((float) Math.random() * WORLD_SIZE, (float) Math.random() * WORLD_SIZE);
+
+            // Don't spawn too close to edge
+            float edgeLimit = 100f;
+            if (point.x < edgeLimit || point.y < edgeLimit
+                    || point.x > WORLD_SIZE - edgeLimit || point.y > WORLD_SIZE - edgeLimit) continue;
+
+            // Don't spawn too close to player start
+            float playerDistanceLimit = 200f;
+            if (Math.abs(point.x - mPlayer.getX()) < playerDistanceLimit
+                    || Math.abs(point.y - mPlayer.getY()) < playerDistanceLimit) continue;
+
+            // Don't spawn too close too other gravity actors
+            for (GravityActor actor : mGravities) {
+                float dist = (float) Math.sqrt(Math.pow(point.x - actor.getX(), 2) + Math.pow(point.y - actor.getY(), 2));
+                if (dist < (radius + actor.getRadius()) * 1.5) {
+                    continue outer;
+                }
+            }
+
+            break;
+        } while (true);
+
+        return point;
     }
 
     private ContactListener mContactListener = new ContactListener() {

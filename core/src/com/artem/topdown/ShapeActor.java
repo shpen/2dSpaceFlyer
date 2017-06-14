@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class ShapeActor extends Actor {
-    private static final ShapeRenderer sRenderer = new ShapeRenderer();
+    public static final ShapeRenderer sRenderer = new ShapeRenderer();
 
     @Override
     public final void draw(Batch batch, float parentAlpha) {
