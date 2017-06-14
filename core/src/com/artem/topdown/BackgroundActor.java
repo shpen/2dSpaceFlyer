@@ -1,15 +1,20 @@
 package com.artem.topdown;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class BackgroundActor extends ShapeActor {
+public class BackgroundActor extends Actor {
     private static final int NUM_POINTS = 200;
 
-    private static final float ALPHA_MIN = 0.2f;
-    private static final float ALPHA_RANGE = 0.4f;
+    private static final float ALPHA_MIN = 0.5f;
+    private static final float ALPHA_RANGE = 0.5f;
 
     private static final float RADIUS_MIN_PX = 0.5f;
     private static final float RADIUS_RANGE_PX = 1f;
+
+    private static final Texture TEXTURE = new Texture("square.png");
 
     private final float[] mX;
     private final float[] mY;
@@ -31,6 +36,14 @@ public class BackgroundActor extends ShapeActor {
     }
 
     @Override
+    public void draw(Batch batch, float parentAlpha) {
+        for (int i = 0; i < NUM_POINTS; i++) {
+            batch.setColor(1, 1, 1, mA[i]);
+            batch.draw(TEXTURE, mX[i], mY[i], mR[i], mR[i]);
+        }
+    }
+
+    /*@Override
     protected boolean onDraw(ShapeRenderer renderer, float parentAlpha) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -41,5 +54,5 @@ public class BackgroundActor extends ShapeActor {
         }
 
         return false;
-    }
+    }*/
 }
