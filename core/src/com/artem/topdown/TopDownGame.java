@@ -31,7 +31,7 @@ public class TopDownGame extends ApplicationAdapter {
     private static final float VIEWPORT_SIZE = 300f;
     private static final float CAMERA_FOLLOW_SPEED = 0.05f;
 
-    private static final float BASE_GAME_SPEED = 1/60f;
+    private static final float BASE_GAME_SPEED = 1/70f;
     private static final float GAME_SPEED_ADD = BASE_GAME_SPEED / 10000f;
 
     private HashSet<PhysicsActor> mRemovePhysicsActors;

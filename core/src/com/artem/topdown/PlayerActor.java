@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PlayerActor extends PhysicsActor {
 
     private static final float ROTATION_SPEED = 60f;
-    private static final float FORWARD_ACCEL = 30.0f;
+    private static final float FORWARD_ACCEL = 35.0f;
     private static final float MOVE_SPEED = 10.0f;
 
     private final float[] mVerts;
